@@ -1,0 +1,64 @@
+import re
+import csv
+class user_login():
+    
+    def __init__(self):
+        pass
+
+    def register(self):
+        print("*****Register here*****\n")
+        name,password = user.details()
+        condition = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{8,16}$"
+        match = re.compile(condition)
+        if (bool(re.search(match, password))==True):
+            c_password = input("Confirm password : ")
+            if (password==c_password):
+                l=[]
+                l.append(name)
+                l.append(password)
+                with open('Data.csv','a',newline="") as f:
+                    data =csv.writer(f)
+                    data.writerow(l)
+                with open('Data.csv','r') as f:
+                    data=csv.reader(f)                    
+                print("-------Registered Successfully--------")
+                user.login()
+                
+            else:
+                print("Please enter the correct password")
+                user.register()
+        else:
+                print("Password should contails Capital letter,digits and spacial cases") 
+                user.register()      
+    def login(self):
+            print("*****Enter Login details*****\n")
+            login_name,login_password = user.details()
+            Flag = 0
+            with open('Data.csv','r') as f:
+                d=csv.reader(f)
+                for x in d: 
+                    if(x[0]==login_name and x[1]==login_password):
+                        print("*****Successfully logged in*****")
+                        print("Welcome",login_name,"!")
+                        Flag = 1 
+                        from Filter import filter
+                        obj= filter()
+                        obj.operation()
+            if(Flag==0):
+                print("Invalid login")
+                user.login()
+    def details(self):
+        name=input("Enter your name : ")
+        upassword=input("Enter password :" ) 
+        return name,upassword
+print(" ***** Welcome to TenantCloud Tenant Finder Services *****")
+print(" \t 1. Register\n ")
+print(" \t 2. Login\n")
+user_option = int(input("Enter your option: "))
+user = user_login()
+if user_option == 1:
+    user.register() 
+elif user_option == 2:
+    user.login()
+else:
+    print("please enter the valid option")
